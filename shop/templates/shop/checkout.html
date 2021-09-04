@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"></script>
+    <title>Checkout</title>
+</head>
+<body>
+    <h2 class="text-center mt-2">This is a Checkout Page</h2>
+    <div class="container m-2 p-2">
+        <div class="row p-3">
+            <div class="col-md-12">
+                <ul id="item_list" class="list-group">
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form method="POST" class="row g-3">
+                    {% csrf_token %}
+
+                    <input type="hidden" id="items" name="items" />
+
+                    <div class="col-md-6">
+                      <label for="name" class="form-label">Name</label>
+                      <input type="text" name="name" class="form-control" id="name" placeholder="John">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="text" name="email" class="form-control" id="email" placeholder="john@gmail.com">
+                    </div>
+                    <div class="col-12">
+                      <label for="address" class="form-label">Address</label>
+                      <input type="text" name="address" class="form-control" id="address" placeholder="1234 Main St">
+                    </div>
+                   
+                    <div class="col-md-6">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" name="city" class="form-control" id="city">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="state" class="form-label">State</label>
+                      <input type="text" name="state" class="form-control" id="state">
+                    </div>
+                    <div class="col-md-2">
+                      <label for="zipcode" class="form-label">Zip</label>
+                      <input type="text" name="zipcode" class="form-control" id="zipcode">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="total" class="form-label">Amount to be Paid</label>
+                        <input readonly="" type="text" class="form-control" id="total" name="total">
+                      </div>
+                   
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary">Please order</button>
+                    </div>
+                  </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+
+    if(localStorage.getItem('cart') == null) {
+        var cart = {}
+    }
+    else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+
+    let total = 0;
+    for (item in cart) {
+       let name = cart[item][1];
+       let quantity = cart[item][0];
+       let price = cart[item][2];
+       total = total + cart[item][2];
+
+       var itemString = `<li class="list-group-item"><span class="">${name}</span><span class=""> ${quantity}</span><span class=""> ${price}</span></li>`;
+       $('#item_list').append(itemString);
+
+    }
+
+    totalPrice = `<li class="list-group-item d-flex justify-content-between align-items-center"><b>Your Total: ${total}</b></li>` 
+    $('#item_list').append(totalPrice);
+
+    $('#items').val(JSON.stringify(cart))
+    $('#total').val(JSON.stringify(total))
+
+
+</script>
+
+</html>
